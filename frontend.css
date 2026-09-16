@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f8;
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            background: #2563eb;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 14px;
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav button {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        nav button:hover {
+            background: #1d4ed8;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            padding: 30px;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section h2 {
+            margin-bottom: 20px;
+        }
+
+        /* Dashboard */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .card p {
+            font-size: 30px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        /* Search */
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            background: white;
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #2563eb;
+            color: white;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        /* Buttons */
+        .edit {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 7px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 2px;
+        }
+
+        .delete {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 7px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 2px;
+        }
+
+        .edit:hover {
+            background: #d97706;
+        }
+
+        .delete:hover {
+            background: #b91c1c;
+        }
+
+        /* Form */
+        .form-container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .save-btn {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .clear-btn {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .save-btn:hover {
+            background: #15803d;
+        }
+
+        .clear-btn:hover {
+            background: #4b5563;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            background: #1f2937;
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 15px;
+            }
+
+            nav button {
+                width: 90%;
+            }
+
+            table {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>Employee Management System</h1>
+        <p>CRUD Based Full Stack Application</p>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <button onclick="showSection('dashboard')">
+            Dashboard
+        </button>
+
+        <button onclick="showSection('employees')">
+            Employees
+        </button>
+
+        <button onclick="showSection('add')">
+            Add Employee
+        </button>
+    </nav>
+
+
+    <!-- Dashboard -->
+    <section id="dashboard" class="section active">
+
+        <h2>Dashboard</h2>
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>Total Employees</h3>
+                <p id="totalEmployees">0</p>
+            </div>
+
+            <div class="card">
+                <h3>IT Employees</h3>
+                <p id="itEmployees">0</p>
+            </div>
+
+            <div class="card">
+                <h3>System Status</h3>
+                <p>Active</p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Employee List -->
+    <section id="employees" class="section">
+
+        <h2>Employee Records</h2>
+
+        <div class="search-box">
+            <input
+                type="text"
+                id="search"
+                placeholder="Search employee..."
+                onkeyup="searchEmployees()"
+            >
+        </div>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Department</th>
+                        <th>Designation</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="employeeTable">
+                    <tr>
+                        <td colspan="7">
+                            Loading employees...
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- Add / Update Employee -->
+    <section id="add" class="section">
+
+        <div class="form-container">
+
+            <h2 id="formTitle">
+                Add Employee
+            </h2>
+
+            <input
+                type="hidden"
+                id="employeeId"
+            >
+
+            <div class="form-group">
+                <label>Employee Name</label>
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Enter employee name"
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label>Email</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter email"
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label>Phone</label>
+
+                <input
+                    type="text"
+                    id="phone"
+                    placeholder="Enter 10 digit phone number"
+                    maxlength="10"
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label>Department</label>
+
+                <select id="department">
+
+                    <option value="">
+                        Select Department
+                    </option>
+
+                    <option value="HR">
+                        HR
+                    </option>
+
+                    <option value="IT">
+                        IT
+                    </option>
+
+                    <option value="Finance">
+                        Finance
+                    </option>
+
+                    <option value="Marketing">
+                        Marketing
+                    </option>
+
+                    <option value="Sales">
+                        Sales
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Designation</label>
+
+                <input
+                    type="text"
+                    id="designation"
+                    placeholder="Enter designation"
+                >
+
+            </div>
+
+
+            <div class="form-buttons">
+
+                <button
+                    class="save-btn"
+                    id="saveBtn"
+                    onclick="saveEmployee()"
+                >
+                    Add Employee
+                </button>
+
+                <button
+                    class="clear-btn"
+                    onclick="clearForm()"
+                >
+                    Clear
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+        <p>
+            Employee Management System © 2026
+        </p>
+    </footer>
+
+
+    <script>
+
+        // Backend API URL
+        const API =
+            "http://127.0.0.1:5000/api/employees";
+
+        let employees = [];
+
+
+        // Show Section
+        function showSection(id) {
+
+            document
+                .querySelectorAll(".section")
+                .forEach(section => {
+
+                    section.classList.remove("active");
+
+                });
+
+            document
+                .getElementById(id)
+                .classList.add("active");
+
+
+            if (id === "employees") {
+
+                loadEmployees();
+
+            }
+
+        }
+
+
+        // Load Employees
+        async function loadEmployees() {
+
+            try {
+
+                const response =
+                    await fetch(API);
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Failed to load employees"
+                    );
+
+                }
+
+                employees =
+                    await response.json();
+
+                displayEmployees(employees);
+
+                updateDashboard();
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                document.getElementById(
+                    "employeeTable"
+                ).innerHTML = `
+                    <tr>
+                        <td colspan="7">
+                            Backend server is not running.
+                        </td>
+                    </tr>
+                `;
+
+            }
+
+        }
+
+
+        // Display Employees
+        function displayEmployees(data) {
+
+            const table =
+                document.getElementById(
+                    "employeeTable"
+                );
+
+            table.innerHTML = "";
+
+
+            if (data.length === 0) {
+
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="7">
+                            No employees found
+                        </td>
+                    </tr>
+                `;
+
+                return;
+
+            }
+
+
+            data.forEach(employee => {
+
+                table.innerHTML += `
+
+                    <tr>
+
+                        <td>
+                            ${employee.id}
+                        </td>
+
+                        <td>
+                            ${employee.name}
+                        </td>
+
+                        <td>
+                            ${employee.email}
+                        </td>
+
+                        <td>
+                            ${employee.phone}
+                        </td>
+
+                        <td>
+                            ${employee.department}
+                        </td>
+
+                        <td>
+                            ${employee.designation}
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="edit"
+                                onclick="editEmployee(${employee.id})"
+                            >
+                                Edit
+                            </button>
+
+                            <button
+                                class="delete"
+                                onclick="deleteEmployee(${employee.id})"
+                            >
+                                Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            });
+
+        }
+
+
+        // Add / Update Employee
+        async function saveEmployee() {
+
+            const id =
+                document.getElementById(
+                    "employeeId"
+                ).value;
+
+
+            const data = {
+
+                name:
+                    document.getElementById(
+                        "name"
+                    ).value.trim(),
+
+                email:
+                    document.getElementById(
+                        "email"
+                    ).value.trim(),
+
+                phone:
+                    document.getElementById(
+                        "phone"
+                    ).value.trim(),
+
+                department:
+                    document.getElementById(
+                        "department"
+                    ).value,
+
+                designation:
+                    document.getElementById(
+                        "designation"
+                    ).value.trim()
+
+            };
+
+
+            // Validation
+            if (
+                !data.name ||
+                !data.email ||
+                !data.phone ||
+                !data.department ||
+                !data.designation
+            ) {
+
+                alert(
+                    "Please fill all fields."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                !/^[0-9]{10}$/.test(
+                    data.phone
+                )
+            ) {
+
+                alert(
+                    "Enter a valid 10 digit phone number."
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+
+                        id
+                            ? `${API}/${id}`
+                            : API,
+
+                        {
+
+                            method:
+                                id
+                                    ? "PUT"
+                                    : "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    data
+                                )
+
+                        }
+
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Operation failed"
+                    );
+
+                }
+
+
+                alert(
+
+                    id
+                        ? "Employee updated successfully!"
+                        : "Employee added successfully!"
+
+                );
+
+
+                clearForm();
+
+                await loadEmployees();
+
+                showSection(
+                    "employees"
+                );
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to save employee."
+                );
+
+            }
+
+        }
+
+
+        // Edit Employee
+        function editEmployee(id) {
+
+            const employee =
+                employees.find(
+                    e => e.id === id
+                );
+
+
+            if (!employee) {
+
+                return;
+
+            }
+
+
+            document.getElementById(
+                "employeeId"
+            ).value =
+                employee.id;
+
+
+            document.getElementById(
+                "name"
+            ).value =
+                employee.name;
+
+
+            document.getElementById(
+                "email"
+            ).value =
+                employee.email;
+
+
+            document.getElementById(
+                "phone"
+            ).value =
+                employee.phone;
+
+
+            document.getElementById(
+                "department"
+            ).value =
+                employee.department;
+
+
+            document.getElementById(
+                "designation"
+            ).value =
+                employee.designation;
+
+
+            document.getElementById(
+                "formTitle"
+            ).innerText =
+                "Update Employee";
+
+
+            document.getElementById(
+                "saveBtn"
+            ).innerText =
+                "Update Employee";
+
+
+            showSection("add");
+
+        }
+
+
+        // Delete Employee
+        async function deleteEmployee(id) {
+
+            if (
+                !confirm(
+                    "Are you sure you want to delete this employee?"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+
+                        `${API}/${id}`,
+
+                        {
+                            method: "DELETE"
+                        }
+
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Delete failed"
+                    );
+
+                }
+
+
+                alert(
+                    "Employee deleted successfully!"
+                );
+
+
+                loadEmployees();
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to delete employee."
+                );
+
+            }
+
+        }
+
+
+        // Search Employees
+        function searchEmployees() {
+
+            const keyword =
+                document.getElementById(
+                    "search"
+                )
+                .value
+                .toLowerCase();
+
+
+            const filtered =
+                employees.filter(
+                    employee =>
+
+                        employee.name
+                            .toLowerCase()
+                            .includes(keyword)
+
+                        ||
+
+                        employee.email
+                            .toLowerCase()
+                            .includes(keyword)
+
+                        ||
+
+                        employee.department
+                            .toLowerCase()
+                            .includes(keyword)
+
+                        ||
+
+                        employee.designation
+                            .toLowerCase()
+                            .includes(keyword)
+
+                );
+
+
+            displayEmployees(
+                filtered
+            );
+
+        }
+
+
+        // Clear Form
+        function clearForm() {
+
+            document.getElementById(
+                "employeeId"
+            ).value = "";
+
+
+            document.getElementById(
+                "name"
+            ).value = "";
+
+
+            document.getElementById(
+                "email"
+            ).value = "";
+
+
+            document.getElementById(
+                "phone"
+            ).value = "";
+
+
+            document.getElementById(
+                "department"
+            ).value = "";
+
+
+            document.getElementById(
+                "designation"
+            ).value = "";
+
+
+            document.getElementById(
+                "formTitle"
+            ).innerText =
+                "Add Employee";
+
+
+            document.getElementById(
+                "saveBtn"
+            ).innerText =
+                "Add Employee";
+
+        }
+
+
+        // Update Dashboard
+        function updateDashboard() {
+
+            document.getElementById(
+                "totalEmployees"
+            ).innerText =
+                employees.length;
+
+
+            const itCount =
+                employees.filter(
+                    employee =>
+                        employee.department === "IT"
+                ).length;
+
+
+            document.getElementById(
+                "itEmployees"
+            ).innerText =
+                itCount;
+
+        }
+
+
+        // Load data when page opens
+        loadEmployees();
+
+    </script>
+
+</body>
+</html>
