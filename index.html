@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Employee Management System</h1>
+        <p>Simple CRUD Web Application</p>
+    </header>
+
+    <div class="container">
+
+        <!-- Employee Form -->
+        <section class="form-section">
+            <h2 id="formTitle">Add Employee</h2>
+
+            <form id="employeeForm">
+
+                <input type="hidden" id="employeeId">
+
+                <label>Employee Name</label>
+                <input type="text" id="name" placeholder="Enter employee name" required>
+
+                <label>Email</label>
+                <input type="email" id="email" placeholder="Enter email" required>
+
+                <label>Phone</label>
+                <input type="tel" id="phone" placeholder="Enter phone number" required>
+
+                <label>Department</label>
+                <select id="department" required>
+                    <option value="">Select Department</option>
+                    <option value="HR">HR</option>
+                    <option value="IT">IT</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Sales">Sales</option>
+                </select>
+
+                <label>Designation</label>
+                <input type="text" id="designation" placeholder="Enter designation" required>
+
+                <button type="submit" id="submitBtn">Add Employee</button>
+                <button type="button" id="cancelBtn" onclick="cancelEdit()">
+                    Cancel
+                </button>
+
+            </form>
+        </section>
+
+
+        <!-- Employee List -->
+        <section class="list-section">
+
+            <div class="list-header">
+                <h2>Employee List</h2>
+
+                <input
+                    type="text"
+                    id="search"
+                    placeholder="Search employee..."
+                    onkeyup="searchEmployee()"
+                >
+            </div>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Department</th>
+                        <th>Designation</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="employeeTable">
+                    <!-- Employees will appear here -->
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </div>
+
+    <footer>
+        <p>© 2026 Employee Management System</p>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
