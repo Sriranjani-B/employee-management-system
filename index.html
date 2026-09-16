@@ -1,103 +1,835 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Management System</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Employee Management System</title>
+
+<style>
+
+/* ===== GENERAL ===== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    color: #333;
+}
+
+/* ===== HEADER ===== */
+
+header {
+    background: #1f4e79;
+    color: white;
+    text-align: center;
+    padding: 25px;
+}
+
+header h1 {
+    margin-bottom: 8px;
+}
+
+header p {
+    font-size: 15px;
+}
+
+/* ===== CONTAINER ===== */
+
+.container {
+    width: 92%;
+    max-width: 1200px;
+    margin: 30px auto;
+}
+
+/* ===== CARD ===== */
+
+.card {
+    background: white;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.card h2 {
+    color: #1f4e79;
+    margin-bottom: 20px;
+}
+
+/* ===== FORM ===== */
+
+form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+input,
+select {
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #1f4e79;
+}
+
+/* ===== BUTTONS ===== */
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    align-items: end;
+}
+
+button {
+    border: none;
+    border-radius: 6px;
+    padding: 11px 18px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.primary {
+    background: #1f4e79;
+    color: white;
+}
+
+.primary:hover {
+    background: #163a5c;
+}
+
+.secondary {
+    background: #777;
+    color: white;
+}
+
+/* ===== TABLE HEADER ===== */
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#search {
+    width: 260px;
+}
+
+/* ===== TABLE ===== */
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+th {
+    background: #1f4e79;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background: #f8f8f8;
+}
+
+/* ===== ACTION BUTTONS ===== */
+
+.action-btn {
+    padding: 7px 12px;
+    margin: 2px;
+}
+
+.edit {
+    background: #f0ad4e;
+    color: white;
+}
+
+.delete {
+    background: #d9534f;
+    color: white;
+}
+
+/* ===== FOOTER ===== */
+
+footer {
+    background: #1f4e79;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 30px;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 700px) {
+
+    form {
+        grid-template-columns: 1fr;
+    }
+
+    .table-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+
+    #search {
+        width: 100%;
+    }
+}
+
+</style>
 </head>
+
 
 <body>
 
-    <header>
-        <h1>Employee Management System</h1>
-        <p>Simple CRUD Web Application</p>
-    </header>
+<!-- ===== HEADER ===== -->
 
-    <div class="container">
+<header>
 
-        <!-- Employee Form -->
-        <section class="form-section">
-            <h2 id="formTitle">Add Employee</h2>
+    <h1>Employee Management System</h1>
 
-            <form id="employeeForm">
+    <p>CRUD Based Web Application</p>
 
-                <input type="hidden" id="employeeId">
+</header>
+
+
+<main class="container">
+
+    <!-- ===== EMPLOYEE FORM ===== -->
+
+    <section class="card">
+
+        <h2 id="formTitle">Add Employee</h2>
+
+        <form id="employeeForm">
+
+            <input type="hidden" id="employeeId">
+
+
+            <div class="form-group">
 
                 <label>Employee Name</label>
-                <input type="text" id="name" placeholder="Enter employee name" required>
-
-                <label>Email</label>
-                <input type="email" id="email" placeholder="Enter email" required>
-
-                <label>Phone</label>
-                <input type="tel" id="phone" placeholder="Enter phone number" required>
-
-                <label>Department</label>
-                <select id="department" required>
-                    <option value="">Select Department</option>
-                    <option value="HR">HR</option>
-                    <option value="IT">IT</option>
-                    <option value="Finance">Finance</option>
-                    <option value="Marketing">Marketing</option>
-                    <option value="Sales">Sales</option>
-                </select>
-
-                <label>Designation</label>
-                <input type="text" id="designation" placeholder="Enter designation" required>
-
-                <button type="submit" id="submitBtn">Add Employee</button>
-                <button type="button" id="cancelBtn" onclick="cancelEdit()">
-                    Cancel
-                </button>
-
-            </form>
-        </section>
-
-
-        <!-- Employee List -->
-        <section class="list-section">
-
-            <div class="list-header">
-                <h2>Employee List</h2>
 
                 <input
                     type="text"
-                    id="search"
-                    placeholder="Search employee..."
-                    onkeyup="searchEmployee()"
+                    id="name"
+                    placeholder="Enter employee name"
+                    required
                 >
+
             </div>
+
+
+            <div class="form-group">
+
+                <label>Email</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter email"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Phone</label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    placeholder="Enter 10 digit phone"
+                    maxlength="10"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Department</label>
+
+                <select id="department" required>
+
+                    <option value="">Select Department</option>
+
+                    <option>HR</option>
+
+                    <option>IT</option>
+
+                    <option>Finance</option>
+
+                    <option>Marketing</option>
+
+                    <option>Sales</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Designation</label>
+
+                <input
+                    type="text"
+                    id="designation"
+                    placeholder="Enter designation"
+                    required
+                >
+
+            </div>
+
+
+            <div class="buttons">
+
+                <button
+                    type="submit"
+                    class="primary"
+                    id="submitBtn">
+                    Add Employee
+                </button>
+
+
+                <button
+                    type="button"
+                    class="secondary"
+                    id="cancelBtn"
+                    hidden>
+                    Cancel
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <!-- ===== EMPLOYEE RECORDS ===== -->
+
+    <section class="card">
+
+        <div class="table-header">
+
+            <h2>Employee Records</h2>
+
+            <input
+                type="search"
+                id="search"
+                placeholder="Search employee..."
+            >
+
+        </div>
+
+
+        <div class="table-container">
 
             <table>
 
                 <thead>
+
                     <tr>
+
                         <th>ID</th>
+
                         <th>Name</th>
+
                         <th>Email</th>
+
                         <th>Phone</th>
+
                         <th>Department</th>
+
                         <th>Designation</th>
+
                         <th>Actions</th>
+
                     </tr>
+
                 </thead>
 
+
                 <tbody id="employeeTable">
-                    <!-- Employees will appear here -->
+
                 </tbody>
 
             </table>
 
-        </section>
+        </div>
 
-    </div>
+    </section>
 
-    <footer>
-        <p>© 2026 Employee Management System</p>
-    </footer>
+</main>
 
-    <script src="script.js"></script>
+
+<!-- ===== FOOTER ===== -->
+
+<footer>
+
+    <p>Employee Management System © 2026</p>
+
+</footer>
+
+
+<script>
+
+/* ==========================================
+   GET HTML ELEMENTS
+========================================== */
+
+const form = document.getElementById("employeeForm");
+
+const table = document.getElementById("employeeTable");
+
+const search = document.getElementById("search");
+
+const employeeId = document.getElementById("employeeId");
+
+const nameInput = document.getElementById("name");
+
+const emailInput = document.getElementById("email");
+
+const phoneInput = document.getElementById("phone");
+
+const departmentInput =
+    document.getElementById("department");
+
+const designationInput =
+    document.getElementById("designation");
+
+const formTitle =
+    document.getElementById("formTitle");
+
+const submitBtn =
+    document.getElementById("submitBtn");
+
+const cancelBtn =
+    document.getElementById("cancelBtn");
+
+
+/* ==========================================
+   LOAD DATA FROM LOCAL STORAGE
+========================================== */
+
+let employees =
+    JSON.parse(localStorage.getItem("employees")) || [];
+
+
+/* ==========================================
+   DISPLAY EMPLOYEES
+========================================== */
+
+function displayEmployees(data = employees) {
+
+    table.innerHTML = "";
+
+
+    if (data.length === 0) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="7">
+                    No employee records found
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    data.forEach((employee, index) => {
+
+        const row = document.createElement("tr");
+
+
+        row.innerHTML = `
+
+            <td>${index + 1}</td>
+
+            <td>${employee.name}</td>
+
+            <td>${employee.email}</td>
+
+            <td>${employee.phone}</td>
+
+            <td>${employee.department}</td>
+
+            <td>${employee.designation}</td>
+
+            <td>
+
+                <button
+                    class="action-btn edit"
+                    onclick="editEmployee(${employee.id})">
+                    Edit
+                </button>
+
+                <button
+                    class="action-btn delete"
+                    onclick="deleteEmployee(${employee.id})">
+                    Delete
+                </button>
+
+            </td>
+        `;
+
+
+        table.appendChild(row);
+
+    });
+
+}
+
+
+/* ==========================================
+   ADD / UPDATE EMPLOYEE
+========================================== */
+
+form.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+
+    const name =
+        nameInput.value.trim();
+
+    const email =
+        emailInput.value.trim();
+
+    const phone =
+        phoneInput.value.trim();
+
+    const department =
+        departmentInput.value;
+
+    const designation =
+        designationInput.value.trim();
+
+
+    /* ===== VALIDATION ===== */
+
+    if (
+        !name ||
+        !email ||
+        !phone ||
+        !department ||
+        !designation
+    ) {
+
+        alert("Please fill all fields.");
+
+        return;
+    }
+
+
+    if (!/^[0-9]{10}$/.test(phone)) {
+
+        alert("Phone number must contain 10 digits.");
+
+        return;
+    }
+
+
+    if (employeeId.value) {
+
+        /* ===== UPDATE ===== */
+
+        const employee =
+            employees.find(
+                emp => emp.id == employeeId.value
+            );
+
+
+        employee.name = name;
+
+        employee.email = email;
+
+        employee.phone = phone;
+
+        employee.department = department;
+
+        employee.designation = designation;
+
+
+        alert("Employee updated successfully.");
+
+    }
+
+    else {
+
+        /* ===== CREATE ===== */
+
+        const newEmployee = {
+
+            id: Date.now(),
+
+            name: name,
+
+            email: email,
+
+            phone: phone,
+
+            department: department,
+
+            designation: designation
+
+        };
+
+
+        employees.push(newEmployee);
+
+
+        alert("Employee added successfully.");
+
+    }
+
+
+    saveData();
+
+    resetForm();
+
+    displayEmployees();
+
+});
+
+
+/* ==========================================
+   EDIT EMPLOYEE
+========================================== */
+
+function editEmployee(id) {
+
+    const employee =
+        employees.find(
+            emp => emp.id == id
+        );
+
+
+    if (!employee) return;
+
+
+    employeeId.value =
+        employee.id;
+
+    nameInput.value =
+        employee.name;
+
+    emailInput.value =
+        employee.email;
+
+    phoneInput.value =
+        employee.phone;
+
+    departmentInput.value =
+        employee.department;
+
+    designationInput.value =
+        employee.designation;
+
+
+    formTitle.textContent =
+        "Update Employee";
+
+    submitBtn.textContent =
+        "Update Employee";
+
+    cancelBtn.hidden =
+        false;
+
+
+    window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+    });
+
+}
+
+
+/* ==========================================
+   DELETE EMPLOYEE
+========================================== */
+
+function deleteEmployee(id) {
+
+    const employee =
+        employees.find(
+            emp => emp.id == id
+        );
+
+
+    if (!employee) return;
+
+
+    const confirmDelete =
+        confirm(
+            `Delete employee "${employee.name}"?`
+        );
+
+
+    if (!confirmDelete) return;
+
+
+    employees =
+        employees.filter(
+            emp => emp.id != id
+        );
+
+
+    saveData();
+
+    displayEmployees();
+
+}
+
+
+/* ==========================================
+   SEARCH EMPLOYEE
+========================================== */
+
+search.addEventListener(
+    "input",
+    function() {
+
+        const keyword =
+            search.value
+            .toLowerCase()
+            .trim();
+
+
+        const filtered =
+            employees.filter(employee =>
+
+                employee.name
+                .toLowerCase()
+                .includes(keyword)
+
+                ||
+
+                employee.email
+                .toLowerCase()
+                .includes(keyword)
+
+                ||
+
+                employee.department
+                .toLowerCase()
+                .includes(keyword)
+
+                ||
+
+                employee.designation
+                .toLowerCase()
+                .includes(keyword)
+
+            );
+
+
+        displayEmployees(filtered);
+
+    }
+);
+
+
+/* ==========================================
+   SAVE DATA
+========================================== */
+
+function saveData() {
+
+    localStorage.setItem(
+
+        "employees",
+
+        JSON.stringify(employees)
+
+    );
+
+}
+
+
+/* ==========================================
+   RESET FORM
+========================================== */
+
+function resetForm() {
+
+    form.reset();
+
+    employeeId.value = "";
+
+    formTitle.textContent =
+        "Add Employee";
+
+    submitBtn.textContent =
+        "Add Employee";
+
+    cancelBtn.hidden =
+        true;
+
+}
+
+
+/* ==========================================
+   CANCEL UPDATE
+========================================== */
+
+cancelBtn.addEventListener(
+    "click",
+    resetForm
+);
+
+
+/* ==========================================
+   INITIAL DISPLAY
+========================================== */
+
+displayEmployees();
+
+</script>
 
 </body>
 </html>
